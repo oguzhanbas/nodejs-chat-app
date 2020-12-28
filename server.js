@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+//Main get 
 app.get('/', (request, response) => {
     if (localStorage.getItem('chatUser')) {
         response.render('chat', {
@@ -34,16 +35,37 @@ app.get('/', (request, response) => {
     else {
         response.redirect('/login');
     }
-
 });
+//Main get  end
 
+
+// Register get
+app.get('/register', (request, response) => {
+    response.render('register', {
+
+    });
+    console.log(request.method);
+});
+// Register get end
+
+
+// Register post
+app.post('/register',(request,response) => {
+    const {name, surname, mail, password, repeatPassword} = request.body;
+    response.send(r);
+});
+// Register post end
+
+//Login get
 app.get('/login', (request, response) => {
     response.render('login', {
 
     });
     console.log(request.method);
 });
+//Login get end
 
+//Login post
 app.post('/login', (request, response) => {
     const { mail, password } = request.body;
     db.collection("users")
@@ -56,9 +78,7 @@ app.post('/login', (request, response) => {
             else {
                 querySnapshot.forEach(function (doc) {
                     if(passwordHash.verify(password, doc.data().password)){
-
                         const {name,surname,email} = doc.data();
-
                         localStorage.setItem('chatUser',{
                             user_id : doc.id,
                             name : name,
@@ -75,6 +95,7 @@ app.post('/login', (request, response) => {
             response.redirect('/');
         }  );  
 });
+//Login post end
 
 io.on('connection', socket => {
 
